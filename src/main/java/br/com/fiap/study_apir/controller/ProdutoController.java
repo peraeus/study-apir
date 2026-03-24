@@ -1,10 +1,13 @@
 package br.com.fiap.study_apir.controller;
 
+import java.util.List;
+
 import org.apache.catalina.startup.ClassLoaderFactory.Repository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +27,15 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Produto criado");
     }
 
-    @GetMapping
-    public ResponseEntity<Produto> findById(Long id){
+    @GetMapping("/{id}")
+    public ResponseEntity<Produto> findById(@PathVariable Long id){
         Produto produto = mockup.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(produto);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Produto>> findAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(mockup.findAll());
     }
 
     @PutMapping
