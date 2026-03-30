@@ -1,8 +1,8 @@
 package br.com.fiap.study_apir.controller;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.apache.catalina.startup.ClassLoaderFactory.Repository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,15 +23,27 @@ public class ProdutoController {
     private RepositoryProdutoMockup mockup = new RepositoryProdutoMockup();
 
     @PostMapping()
-    public ResponseEntity<String> create(){
+    public ResponseEntity<String> create() {
         return ResponseEntity.status(HttpStatus.CREATED).body("Produto criado");
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> findById(@PathVariable Long id){
-        Produto produto = mockup.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(produto);
+    public ResponseEntity<Produto> findById(@PathVariable Long id) {
+        // Optional<Produto> optProduto = mockup.findById(id);
+
+        return mockup
+                .findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
+
+    // map pega o produto e atribuir para a variável
+    // if (optProduto.isPresent()) {
+    // // return ResponseEntity.status(HttpStatus.OK).body(produto);
+    // return ResponseEntity.ok(optProduto.get());
+    // } else {
+    // return ResponseEntity.notFound().build();
+    // }
 
     @GetMapping
     public ResponseEntity<List<Produto>> findAll() {
@@ -39,12 +51,12 @@ public class ProdutoController {
     }
 
     @PutMapping
-    public ResponseEntity<String> update(){
+    public ResponseEntity<String> update() {
         return ResponseEntity.status(HttpStatus.OK).body("Produto atualizado");
     }
 
     @DeleteMapping
-    public ResponseEntity<String> delete(){
+    public ResponseEntity<String> delete() {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Produto excluído");
-        }
+    }
 }
