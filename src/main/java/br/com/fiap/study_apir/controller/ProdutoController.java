@@ -1,7 +1,6 @@
 package br.com.fiap.study_apir.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,16 +46,21 @@ public class ProdutoController {
 
     @GetMapping
     public ResponseEntity<List<Produto>> findAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(mockup.findAll());
+        return ResponseEntity.ok(mockup.findAll());
     }
 
     @PutMapping
     public ResponseEntity<String> update() {
-        return ResponseEntity.status(HttpStatus.OK).body("Produto atualizado");
+        return ResponseEntity.ok("Produto atualizado");
     }
 
-    @DeleteMapping
-    public ResponseEntity<String> delete() {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Produto excluído");
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteByID(@PathVariable Long id) {
+       if (mockup.deleteById(id)){
+        return ResponseEntity.noContent().build();
+       } else {
+        return ResponseEntity.notFound().build();
+       }
+        
     }
 }
