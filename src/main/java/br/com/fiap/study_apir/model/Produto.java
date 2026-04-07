@@ -13,10 +13,14 @@ import lombok.Data;
 // @Setter
 // @RequiredArgsConstructor
 public class Produto {
-    private final Long id;
-    private final String nome;
-    private final BigDecimal valor; // para valores monetários
+    public Produto(Long id, String nome, BigDecimal valor) {
+        this.id = id;
+        this.nome = nome;
+        this.valor = valor;
 
-
-
+    }
+    
+    private Long id;
+    private String nome;
+    private BigDecimal valor; // para valores monetários
 }
