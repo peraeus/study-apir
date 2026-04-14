@@ -5,29 +5,29 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.study_apir.model.Produto;
-import br.com.fiap.study_apir.repository.RepositoryProdutoMockup;
+import br.com.fiap.study_apir.repository.ProdutoRepository;
 
 @RestController
 @RequestMapping("/api/${api.version}/produtos")
 public class ProdutoController {
 
     @Autowired
-    private RepositoryProdutoMockup mockup; // quando uma classe depende de outra classe, temos uma associacao
+    private ProdutoRepository repository;
+    // private RepositoryProdutoMockup mockup; // quando uma classe depende de outra
+    // classe, temos uma associacao
 
     @PostMapping()
     public ResponseEntity<Produto> create(@RequestBody Produto produto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(mockup.create(produto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(null));
     }
 
     @GetMapping("/{id}")
@@ -35,7 +35,7 @@ public class ProdutoController {
 
         // Optional<Produto> optProduto = mockup.findById(id);
 
-        return mockup
+        return repository
                 .findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -51,27 +51,36 @@ public class ProdutoController {
 
     @GetMapping
     public ResponseEntity<List<Produto>> findAll() {
-        return ResponseEntity.ok(mockup.findAll());
+        return ResponseEntity.ok(repository.findAll());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id,
-            @RequestBody Produto produto) {
-        if (mockup.update(id, produto)) {
+    // @PutMapping("/{id}")
+    // public ResponseEntity<String> update(@PathVariable Long id,
+    // @RequestBody Produto produto) {
 
-            return ResponseEntity.ok("Produto atualizado");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    // Optional<Produto> optProduto = repository.findById(id);
+
+    // if (optProduto.isPresent()) {
+    // produto.setId(id);
+    // repository.save(produto);
+    // }
+    // if (mockup.update(id, produto)) {
+
+    // return ResponseEntity.ok("Produto atualizado");
+    // } else {
+    // return ResponseEntity.notFound().build();
+    // }
+    // }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteByID(@PathVariable Long id, @RequestBody Produto produto) {
-        if (mockup.deleteById(id)) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+        // if (mockup.deleteById(id)) {
+        // return ResponseEntity.noContent().build();
+        // } else {
+        // return ResponseEntity.notFound().build();
+        // }
 
     }
 
