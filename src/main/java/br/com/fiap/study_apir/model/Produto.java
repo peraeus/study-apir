@@ -30,4 +30,4 @@ public class Produto {
     private Long id;
     private String nome;
     private BigDecimal valor; // para valores monetários
-}
+    }
